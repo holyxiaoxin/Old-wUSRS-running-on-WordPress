@@ -1,0 +1,16 @@
+[16-Sep-2014 07:47:20 America/New_York] PHP Warning:  require_once(/wordpress/wp-includes/pluggable.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/jiarhcah/public_html/painapp/login.php on line 7
+[16-Sep-2014 07:47:20 America/New_York] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required '/wordpress/wp-includes/pluggable.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/jiarhcah/public_html/painapp/login.php on line 7
+[16-Sep-2014 07:48:03 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:49:53 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:51:47 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:51:50 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:51:51 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:51:52 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:54:02 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:54:03 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:54:25 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 07:54:26 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 12:06:19 UTC] PHP Fatal error:  Cannot redeclare map_meta_cap() (previously declared in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/capabilities.php:1047) in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/capabilities.php on line 1342
+[16-Sep-2014 08:10:26 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 08:12:45 America/New_York] PHP Fatal error:  Call to undefined function sanitize_user() in /home/jiarhcah/public_html/painapp/wordpress/wp-includes/pluggable.php on line 542
+[16-Sep-2014 08:12:47 America/New_York] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/jiarhcah/public_html/painapp/login2.php on line 9
