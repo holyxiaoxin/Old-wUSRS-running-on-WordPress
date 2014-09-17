@@ -9,11 +9,20 @@
 	$response['success'] = 0;
 	$response['error'] = 0;
 
-	if(!user_pass_ok("holyxiaoxin","sunshine")){
-		$response['error'] = 1;
+	$auth = wp_authenticate("holyxiaoxin","sunshine1");
+
+	if ( is_wp_error( $auth ) ) {
+	   $error_string = $auth->get_error_message();
+	   echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
 	}else{
-		$response['success'] = 1;
+		echo 'login success';
 	}
 
-	echo json_encode($response);
+	// if(!user_pass_ok("holyxiaoxin","sunshine")){
+	// 	$response['error'] = 1;
+	// }else{
+	// 	$response['success'] = 1;
+	// }
+
+	//echo json_encode($response);
 ?>
