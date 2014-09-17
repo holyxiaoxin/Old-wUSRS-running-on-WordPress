@@ -42,6 +42,7 @@ and Blueprint http://www.blueprintcss.org/
 	10.3 - Comments
 11.0 - Infinite scroll
 12.0 - Media
+13.0 - Custom CSS by Lim Jia Rong
 --------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
@@ -653,4 +654,11 @@ embed,
 iframe,
 object {
 	max-width: 100%;
+}
+
+/*--------------------------------------------------------------
+12.0 Custom CSS by Lim Jia Rong
+--------------------------------------------------------------*/
+.custom-wrapper{
+	margin: 5em;
 }
