@@ -24,15 +24,21 @@ get_header(); ?>
 							<td>Number of questions</td>
 						</tr>
 						<tr>
-							<td><form><input type="text" id="numberOfFields"></form></td>
-							<td><button type="button" id="updateNumberOfQuestions">Update</button></td>
+							<td><form><input type="text" id="numberOfQuestions"></form></td>
+							<td><button type="button" id="add-questionnaire_updateButton">Update</button></td>
 						</tr>
+						<!--add empty row inside a table-->
+						<tr><td>&nbsp;<td></tr>
+						
+					</table>
+
+					<table id="questions">
+						
+					</table>
+
+					<table>
 						<tr>
-							<td>Questions</td>
-							<td><span id="question"></span></td>
-						</tr>
-						<tr>
-							<td><button type="button" onclick="location.href='/painapp/wordpress/custom-questionnaire/add-questionnaire/'">Submit</button></td>
+							<td><button type="button" id="add-questionnaire_submitButton">Submit</button></td>
 						</tr>
 					</table>
 				</div>
