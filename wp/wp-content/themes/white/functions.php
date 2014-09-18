@@ -179,9 +179,6 @@ function white_scripts() {
 	//Comes with _s Framework.
 	wp_enqueue_script( 'white-skip-link-focus-fix', get_template_directory_uri() . '/assets/js/skip-link-focus-fix.js', array(), '20130115', true );
 
-	//Load JQuery Js
-	wp_enqueue_script('enqueue_templateportfolio_js', get_template_directory_uri() . '/js/templateportfolio.js', array('jquery'), null, true );
-
 	//For the Default WordPress Comment's Reply System
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

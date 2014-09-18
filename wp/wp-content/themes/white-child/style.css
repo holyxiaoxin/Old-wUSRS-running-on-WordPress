@@ -1,5 +1,5 @@
 /*
-	Theme Name: Level Up Child
+	Theme Name: White Child
 	Author: Lim Jia Rong
 	Author URI: http://jiarong.me/wordpress/
 	Theme URI: http://jiarong.me/wordpress/
@@ -8,3 +8,11 @@
 	Version: 0.1
 */
 @import url("../white/style.css");
+
+/*--------------------------------------------------------------
+12.0 Custom CSS by Lim Jia Rong
+--------------------------------------------------------------*/
+.custom-wrapper{
+	margin-top: 5em;
+	margin-bottom: 5em;
+}

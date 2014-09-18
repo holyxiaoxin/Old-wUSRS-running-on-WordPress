@@ -24,14 +24,8 @@ get_header(); ?>
 							<td>Number of questions</td>
 						</tr>
 						<tr>
-							<td><form><input type="text" id="numberOfFields" name="numberOfFields"></form></td>
-							<script type='text/javascript'>
-								function printNumber(){
-									var value = jquery('#numberOfFields').val();
-									jquery('#question').text('value');
-								}
-							</script>
-							<td><button type="button" onclick="printNumber();">Update</button></td>
+							<td><form><input type="text" id="numberOfFields"></form></td>
+							<td><button type="button" id="updateNumberOfQuestions">Update</button></td>
 						</tr>
 						<tr>
 							<td>Questions</td>
