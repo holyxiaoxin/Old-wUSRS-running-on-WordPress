@@ -20,7 +20,7 @@ get_header(); ?>
 
 				<!--start of Custom Questionnaires-->
 				<div class="custom-wrapper">
-					<button type="button" onclick="goToAddQuestionnaire();">Create New Questionnaire</button>
+					<button type="button" id="custom-questionnaire_createButton" onclick="goToAddQuestionnaire();">Create New Questionnaire</button>
 				</div>
 
 			<?php endwhile; // end of the loop. ?>

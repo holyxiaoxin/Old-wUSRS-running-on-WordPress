@@ -24,8 +24,8 @@ get_header(); ?>
 							<td>Number of questions</td>
 						</tr>
 						<tr>
-							<td><form><input type="text" id="numberOfQuestions"></form></td>
-							<td><button type="button" id="add-questionnaire_updateButton">Update</button></td>
+							<td><form><input type="text" id="add-questionnaire_numberOfQuestions"></form></td>
+							<td><button type="button" id="add-questionnaire_updateOptionsButton">Update</button></td>
 						</tr>
 						<!--add empty row inside a table-->
 						<tr><td>&nbsp;<td></tr>
@@ -42,6 +42,17 @@ get_header(); ?>
 						</tr>
 					</table>
 				</div>
+
+
+				<!--templates-->
+				<table id="add-questionnaire_radioField" class="hidden">
+					<tr>
+						<td>Question</td>
+						<td>Number Of Options</td>
+					</tr>
+						<td><form><input type="text" id="numberOfQuestions"></form></td>
+						<td><button type="button" id="add-questionnaire_updateButton">Update</button></td>
+				</table>
 
 			<?php endwhile; // end of the loop. ?>
 

@@ -16,3 +16,6 @@
 	margin-top: 5em;
 	margin-bottom: 5em;
 }
+.hidden{
+	display: none;
+}
