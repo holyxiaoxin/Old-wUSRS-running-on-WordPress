@@ -16,6 +16,10 @@
 	margin-top: 5em;
 	margin-bottom: 5em;
 }
-.hidden{
+.disappear{
 	display: none;
+}
+
+.hidden{
+	visibility: hidden;
 }
