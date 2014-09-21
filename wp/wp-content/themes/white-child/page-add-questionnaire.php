@@ -43,16 +43,25 @@ get_header(); ?>
 					</table>
 				</div>
 
+				<!--						-->	
+				<!--		templates		-->
+				<!--						-->
 
-				<!--templates-->
-				<table id="add-questionnaire_radioField" class="hidden">
+				<!--radio field table-->
+				<table id="add-questionnaire_radioFieldTemplate" class="hidden">
 					<tr>
 						<td>Question</td>
 						<td>Number Of Options</td>
 					</tr>
-						<td><form><input type="text" id="numberOfQuestions"></form></td>
-						<td><button type="button" id="add-questionnaire_updateButton">Update</button></td>
+					<tr id="add-questionnaire_radioFieldOptionsRow">
+						<td><form><input type="text" id="add-questionnaire_numberOfOptionsTemplate"></form></td>
+						<td><button type="button" id="add-questionnaire_updateButtonTemplate">Update</button></td>
+					</tr>
 				</table>
+				<!--radio field options-->
+				<tr id="add-questionnaire_radioFieldOptionsTemplate" class="hidden">
+					<td><form><input id='add-questionnaire_questionSlider' type='text'></form></td>
+				</tr>
 
 			<?php endwhile; // end of the loop. ?>
 

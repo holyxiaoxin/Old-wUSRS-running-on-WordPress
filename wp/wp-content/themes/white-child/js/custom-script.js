@@ -60,7 +60,7 @@ function updateNumberOfQuestions(){
   							<option value="checkbox">Checkbox</option>\
 						</select>';
 	} 
-	function question(questionNumber) {
+	function sliderQuestion(questionNumber) {
 		return "<form><input id='add-questionnaire_questionSlider"+questionNumber+"' type='text'></form>";
 	}
 	//dynamically changes the row string with the questionNumber provided
@@ -70,12 +70,12 @@ function updateNumberOfQuestions(){
 					<td>"+"Q"+					questionNumber	+		"</td>\
 					<td>"+						questionType(questionNumber)	+		"</td>\
 					<td id='add-questionnaire_questionOptions"+questionNumber+"'>\
-					"				+	question(questionNumber)		+		"</td>\
+					"				+	sliderQuestion(questionNumber)		+		"</td>\
 				</tr>";
 	}
 
 	var table = questionHeader;
-	console.log(numberOfQuestions);
+	console.log("The total number of questions after pressing the update button is: "+numberOfQuestions);
 	//iteratively adds the new row, and changing the question number each time
 	for (i=0; i<numberOfQuestions; i++){
 		table = table + newRow(questionNumber);
@@ -85,9 +85,9 @@ function updateNumberOfQuestions(){
 	
 	//adds the onchange handler after creating the rows
 	$j(".add-questionnaire_questionType").change(function(){
-		// console.log($j(this).attr('data-questionNumber'));
 		var questionNumber=$j(this).attr('data-questionNumber');
-		changeQuestionOptions(questionNumber);
+		var questionType = $j(this).val();
+		changeQuestionOptions(questionNumber, questionType);
 	});
 }
 
@@ -95,12 +95,37 @@ function updateNumberOfQuestions(){
 // 	console.log('number'+$j($this).attr('data-questionNumber'));
 // }
 
-function changeQuestionOptions(questionNumber){
+function changeQuestionOptions(questionNumber, questionType){
 	console.log('the changed selector has this question number: '+questionNumber);
-	$j('#add-questionnaire_questionSlider'+questionNumber).remove();
-	$j('.add-questionnaire_radioField'+questionNumber).remove();
-	$j('#add-questionnaire_radioField').clone().appendTo('#add-questionnaire_questionOptions'+questionNumber).removeClass('hidden').addClass('add-questionnaire_radioField'+questionNumber);
+	console.log('the changed selector has this question type: '+questionType);
+
+	switch(questionType){
+		case "slider":
+			var sliderQuestion=	"<form><input id='add-questionnaire_questionSlider"+questionNumber+"' type='text'></form>";
+			$j('#add-questionnaire_questionOptions'+questionNumber).html(sliderQuestion);
+			break;
+		case "radio":{
+			$j('#add-questionnaire_questionSlider'+questionNumber).remove();	//remove previous slider inputs
+			$j('#add-questionnaire_radioField'+questionNumber).remove();	//remove previous radio inputs
+			$j('#add-questionnaire_radioFieldTemplate').clone()
+				.appendTo('#add-questionnaire_questionOptions'+questionNumber)	//after cloning template, .html() it to the class
+				.removeClass('hidden')	//shows the radio field table
+				.attr('id','add-questionnaire_radioField'+questionNumber);
+				// .children('#add-questionnaire_radioFieldOptionsRow')
+				// .children() //td
+				// .children()	//button,form
+				// .is('#add-questionnaire_updateButtonTemplate').attr()
+				// .children()	//input
+				// .is('#add-questionnaire_numberOfOptionsTemplate').attr('id','add-questionnaire_numberOfOptions'+questionNumber);
+				
+			break;
+		}
+		case "checkbox":
+			break;
+		default:
+			//print some error message
+			break;
+	}
+	
 }
-
-
 
