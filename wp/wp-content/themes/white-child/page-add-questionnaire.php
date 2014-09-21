@@ -32,11 +32,80 @@ get_header(); ?>
 						
 					</table>
 
-					<table id="questions">
-						
+					<table id="add-questionnaire_questions" class="hidden">
+						<tr>
+ 							<td>Question Type</td>
+ 							<td>Question Number</td>
+ 							<td>Question</td>
+ 						</tr>
+ 						<!--add a <hr> line inside table-->
+ 						<tr>
+ 							<td><hr></td><td><hr></td><td><hr></td>
+ 						</tr>
+
+ 						<tr>
+		 					<td><select id="add-questionnaire_questionType">
+		   							<option value="slider">Slider</option>
+		   							<option value="radio">Radio</option>
+		   							<option value="checkbox">Checkbox</option>
+		 						</select></td>
+		 					<td>Q</td>
+		 					<td id="add-questionnaire_question"><form><input type='text'></form></td>
+						</tr>
+					</table>
+					<!--Radio-->
+					<table class="add-questionnaire_questionRadio add-questionnaire_questionType hidden">
+						<tr><td>&nbsp;<td></tr>
+						<tr>
+							<td>Number Of Options</td>
+ 							<td></td>
+ 							<td>Option Number</td>
+ 							<td>Option</td>
+						</tr>
+						<!--add a <hr> line inside table-->
+ 						<tr>
+ 							<td><hr></td><td><hr></td><td><hr></td>
+ 						</tr>
+						<tr>
+							<td><form><input type="text" id="add-questionnaire_numberOfOptions"></form></td>
+							<td><button type="button" id="add-questionnaire_updateButton">Update</button></td>
+							<td>Op 1</td>
+							<td><form><input type="text" id="add-questionnaire_option1"></form></td>
+						</tr>
+
+						</tr>
+							<td></td>
+							<td></td>
+							<td class="add-questionnaire_questionRadio add-questionnaire_questionType hidden">Op 2</td>
+							<td class="add-questionnaire_questionRadio add-questionnaire_questionType hidden"><form><input type="text" id="add-questionnaire_option2"></form></td>
+
+							<!-- <tr>
+								<td>Option 1</td>
+								<td><form><input type="text" id="add-questionnaire_options1"></form></td>
+							</tr>
+							<tr>
+								<td>Option 2</td>
+								<td><form><input type="text" id="add-questionnaire_options2"></form></td>
+							</tr>
+							<tr>
+								<td>Option 3</td>
+								<td><form><input type="text" id="add-questionnaire_options3"></form></td>
+							</tr>
+							<tr>
+								<td>Option 4</td>
+								<td><form><input type="text" id="add-questionnaire_options4"></form></td>
+							</tr>
+							<tr>
+								<td>Option 5</td>
+								<td><form><input type="text" id="add-questionnaire_options5"></form></td>
+							</tr> -->
 					</table>
 
 					<table>
+						<tr>
+							<td><button type="button" id="add-questionnaire_backButton">Back</button></td>
+							<td><button type="button" id="add-questionnaire_nextButton">Next</button></td>
+						</tr>
 						<tr>
 							<td><button type="button" id="add-questionnaire_submitButton">Submit</button></td>
 						</tr>
