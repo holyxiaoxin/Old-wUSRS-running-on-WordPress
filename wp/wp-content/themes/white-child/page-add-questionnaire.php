@@ -47,7 +47,6 @@ get_header(); ?>
 		 					<td><select id="add-questionnaire_questionType">
 		   							<option value="slider">Slider</option>
 		   							<option value="radio">Radio</option>
-		   							<option value="checkbox">Checkbox</option>
 		 						</select></td>
 		 					<td><select id="add-questionnaire_questionNumber">
 		   							<option value="1">1</option>

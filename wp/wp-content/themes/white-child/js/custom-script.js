@@ -21,30 +21,14 @@ $j(document).ready(function() {
     	changeQuestionType(questionType);
 	});
 
-	// //onclick handler for question number dropdown
- //    $j("#add-questionnaire_questionNumber").change(function() {
- //    	var questionNumber = $j('#add-questionnaire_questionNumber').val();
- //    	console.log("updating screen");
- //    	saveCurrentQuestion();
- //    	updateScreen(questionNumber);
-	// });
-
 	//onclick handler for question number dropdown
-    (function () {
-    	var previous;
-	    $j("#add-questionnaire_questionNumber").on('focus', function () {
-	        // Store the current value on focus and on change
-	        previous = this.value;
-	        saveCurrentQuestion();
-		}).change(function() {
-	        // Do something with the previous value after the change
-	        var questionNumber = $j('#add-questionnaire_questionNumber').val();
-	        updateScreen(questionNumber);
-	        // Make sure the previous value is updated
-	        previous = this.value;
-		});
-	})();
-
+    $j("#add-questionnaire_questionNumber").on('focus', function () {
+        saveCurrentQuestion();
+	}).change(function() {
+        // Do something with the previous value after the change
+        var questionNumber = $j('#add-questionnaire_questionNumber').val();
+        updateScreen(questionNumber);
+	});
 
 	//onclick handler for update number options dropdown
     $j("#add-questionnaire_numberOfOptions").change(function() {
@@ -52,7 +36,13 @@ $j(document).ready(function() {
     	updateNumberOfOptions(numberOfOptions);
 	});
 
-	//onclick handler for submit button
+    //onclick handler for back button
+    $j("#add-questionnaire_backButton").click(function() {
+    	previousQuestion();
+    	$j(this).blur();	//unfocus button
+	});
+
+	//onclick handler for next button
     $j("#add-questionnaire_nextButton").click(function() {
     	nextQuestion();
     	$j(this).blur();	//unfocus button
@@ -122,9 +112,24 @@ function clearScreen(){
 	$j('#add-questionnaire_option5').val("");
 }
 
+//takes care of updating the UI, fills in the fields if it was filled previously
 function updateScreen(questionNumber){
 	console.log("beginning of updating");
 	clearScreen();
+	//takes care of rendering the proper UI
+	//hide next button if last question, else shows it
+	if(parseInt(questionNumber)==customQuestionnaire['numberOfQuestions']){
+		$j('#add-questionnaire_nextButton').addClass('hidden');
+	}else{
+		$j('#add-questionnaire_nextButton').removeClass('hidden');
+	}
+	//hide back button if first question, else shows it
+	if(parseInt(questionNumber)==1){
+		$j('#add-questionnaire_backButton').addClass('hidden');
+	}else{
+		$j('#add-questionnaire_backButton').removeClass('hidden');
+	}
+	//check if question number is valid
 	if(questionNumber<=customQuestionnaire['numberOfQuestions']){
 		//clears the whole screen
 		$j('.add-questionnaire_questionType').addClass('disappear');
@@ -235,23 +240,40 @@ function saveCurrentQuestion(){
 function nextQuestion(){
 	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
 	//checks if next button is valid
-	if (currentQuestionNumber<customQuestionnaire['numberOfQuestions']){
+	if (parseInt(currentQuestionNumber)<customQuestionnaire['numberOfQuestions']){
 		//hide next button if next questions is last question
 		if((parseInt(currentQuestionNumber)+1)==customQuestionnaire['numberOfQuestions']){
 			$j('#add-questionnaire_nextButton').addClass('hidden');
 		}
 		//save the question before clearing the screen
 		saveCurrentQuestion();
-		//clear the screen before updating
-		clearScreen();
 		//after saving the question, update the screen
 		updateScreen(parseInt(currentQuestionNumber)+1);
-
 		//adds back button if next question is 2, that could be navigated back to 1.
 		if(currentQuestionNumber==1){
 			$j('#add-questionnaire_backButton').removeClass('hidden');
 		}
 	}else{	//next button is triggered illegally
 		//print some error message
+		console.log("ERROR: next button is triggered illegally");
 	}
 }
+
+function previousQuestion(){
+	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
+	//checks if previous button is valid
+	if (parseInt(currentQuestionNumber)>1){
+		//hide back button if previous questions is first question
+		if((parseInt(currentQuestionNumber)-1)==1){
+			$j('#add-questionnaire_backButton').addClass('hidden');
+		}
+		//save the question before clearing the screen
+		saveCurrentQuestion();
+		//after saving the question, update the screen
+		updateScreen(parseInt(currentQuestionNumber)-1);
+	}else{	//back button is triggered illegally
+		//print some error message
+		console.log("ERROR: back button is triggered illegally");
+	}
+}
+
