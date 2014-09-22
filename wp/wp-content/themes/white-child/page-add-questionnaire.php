@@ -50,7 +50,7 @@ get_header(); ?>
 		   							<option value="checkbox">Checkbox</option>
 		 						</select></td>
 		 					<td><select id="add-questionnaire_questionNumber">
-		   							<option value=1>1</option>
+		   							<option value="1">1</option>
 		 						</select></td>
 		 					<td><form><input type='text' id="add-questionnaire_question"></form></td>
 						</tr>
@@ -69,10 +69,10 @@ get_header(); ?>
  						</tr>
 						<tr>
 							<td><select id="add-questionnaire_numberOfOptions">
-		   							<option value=2>2</option>
-		   							<option value=3>3</option>
-		   							<option value=4>4</option>
-		   							<option value=5>5</option>
+		   							<option value="2">2</option>
+		   							<option value="3">3</option>
+		   							<option value="4">4</option>
+		   							<option value="5">5</option>
 		 						</select></td>
 							<td>Op 1</td>
 							<td><form><input type="text" id="add-questionnaire_option1"></form></td>

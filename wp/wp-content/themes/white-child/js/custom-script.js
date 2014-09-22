@@ -21,12 +21,30 @@ $j(document).ready(function() {
     	changeQuestionType(questionType);
 	});
 
+	// //onclick handler for question number dropdown
+ //    $j("#add-questionnaire_questionNumber").change(function() {
+ //    	var questionNumber = $j('#add-questionnaire_questionNumber').val();
+ //    	console.log("updating screen");
+ //    	saveCurrentQuestion();
+ //    	updateScreen(questionNumber);
+	// });
+
 	//onclick handler for question number dropdown
-    $j("#add-questionnaire_questionNumber").change(function() {
-    	var questionNumber = $j('#add-questionnaire_questionNumber').val();
-    	console.log("updating screen");
-    	updateScreen(questionNumber);
-	});
+    (function () {
+    	var previous;
+	    $j("#add-questionnaire_questionNumber").on('focus', function () {
+	        // Store the current value on focus and on change
+	        previous = this.value;
+	        saveCurrentQuestion();
+		}).change(function() {
+	        // Do something with the previous value after the change
+	        var questionNumber = $j('#add-questionnaire_questionNumber').val();
+	        updateScreen(questionNumber);
+	        // Make sure the previous value is updated
+	        previous = this.value;
+		});
+	})();
+
 
 	//onclick handler for update number options dropdown
     $j("#add-questionnaire_numberOfOptions").change(function() {
@@ -87,17 +105,26 @@ function updateNumberOfQuestions(){
 	}
 }
 
-function updateScreen(questionNumber){
-	console.log("beginning of updating");
+function clearScreen(){
 	//clear question
 	$j('#add-questionnaire_question').val("");
+	//reset question type to slider
+	$j('#add-questionnaire_questionType').val("slider");
 	//clear all the options
 	updateNumberOfOptions(2);
+	//reset the number of options
+	$j('#add-questionnaire_numberOfOptions').val('2');
+	//reset options field
 	$j('#add-questionnaire_option1').val("");
 	$j('#add-questionnaire_option2').val("");
 	$j('#add-questionnaire_option3').val("");
 	$j('#add-questionnaire_option4').val("");
 	$j('#add-questionnaire_option5').val("");
+}
+
+function updateScreen(questionNumber){
+	console.log("beginning of updating");
+	clearScreen();
 	if(questionNumber<=customQuestionnaire['numberOfQuestions']){
 		//clears the whole screen
 		$j('.add-questionnaire_questionType').addClass('disappear');
@@ -107,27 +134,32 @@ function updateScreen(questionNumber){
 		if(typeof customQuestionnaire['question'+questionNumber] != 'undefined'){
 			//fills in question
 			$j('#add-questionnaire_question').val(customQuestionnaire['question'+questionNumber]['question']);
+			//fills in question type
+			$j('#add-questionnaire_questionType').val(customQuestionnaire['question'+questionNumber]['questionType']);
 			//fills in other fields
 			switch(customQuestionnaire['question'+questionNumber]['questionType']){
 				case "radio":{
 					switch(customQuestionnaire['question'+questionNumber]['numberOfOptions']){
 						case "5":
-							$j('#add-questionnaire_option5').val(customQuestionnaire['question'+currentQuestionNumber]['option5']);
+							$j('#add-questionnaire_option5').val(customQuestionnaire['question'+questionNumber]['option5']);
 						case "4":
-							$j('#add-questionnaire_option4').val(customQuestionnaire['question'+currentQuestionNumber]['option4']);
+							$j('#add-questionnaire_option4').val(customQuestionnaire['question'+questionNumber]['option4']);
 						case "3":
-							$j('#add-questionnaire_option3').val(customQuestionnaire['question'+currentQuestionNumber]['option3']);
+							$j('#add-questionnaire_option3').val(customQuestionnaire['question'+questionNumber]['option3']);
 						case "2":
-							$j('#add-questionnaire_option1').val(customQuestionnaire['question'+currentQuestionNumber]['option1']);
-							$j('#add-questionnaire_option2').val(customQuestionnaire['question'+currentQuestionNumber]['option2']);
+							$j('#add-questionnaire_option1').val(customQuestionnaire['question'+questionNumber]['option1']);
+							$j('#add-questionnaire_option2').val(customQuestionnaire['question'+questionNumber]['option2']);
 						default:
 							//pring some error message
 							break;
 					}
+					//opens up the number of options previously remembered
+					updateNumberOfOptions(customQuestionnaire['question'+questionNumber]['numberOfOptions']);
 					$j('.add-questionnaire_questionRadio').removeClass('disappear');
 					break;
 				}
 				default:
+					//prints
 					break;
 			}
 		}
@@ -161,51 +193,57 @@ function updateNumberOfOptions(numberOfOptions){
 	}
 }
 
+function saveCurrentQuestion(){
+	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
+	console.log("currentQuestionNumber is: "+currentQuestionNumber);
+	var questionType = $j('#add-questionnaire_questionType').val();
+	var question = $j('#add-questionnaire_question').val();
+	customQuestionnaire['question'+currentQuestionNumber]={'questionType': questionType, 'question':question};
+	switch(questionType){
+		case "radio":{
+			var numberOfOptions = $j('#add-questionnaire_numberOfOptions').val();
+			customQuestionnaire['question'+currentQuestionNumber]['numberOfOptions'] = numberOfOptions;
+			switch(numberOfOptions){
+				case "5":
+					var option5 = $j('#add-questionnaire_option5').val();
+					customQuestionnaire['question'+currentQuestionNumber]['option5'] = option5;
+				case "4":
+					var option4 = $j('#add-questionnaire_option4').val();
+					customQuestionnaire['question'+currentQuestionNumber]['option4'] = option4;
+				case "3":
+					var option3 = $j('#add-questionnaire_option3').val();
+					customQuestionnaire['question'+currentQuestionNumber]['option3'] = option3;
+				case "2":
+					var option1 = $j('#add-questionnaire_option1').val();
+					var option2 = $j('#add-questionnaire_option2').val();
+					customQuestionnaire['question'+currentQuestionNumber]['option1'] = option1;
+					customQuestionnaire['question'+currentQuestionNumber]['option2'] = option2;
+					break;
+				default:
+					//print some error message
+					break;
+			}
+			break;
+		}
+		default:
+			//print some error message
+			break;
+	}
+	console.log(customQuestionnaire);
+}
+
 function nextQuestion(){
 	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
-	console.log("Current question number: "+currentQuestionNumber+", Question Type: "+questionType+", Question: "+question);
-
 	//checks if next button is valid
 	if (currentQuestionNumber<customQuestionnaire['numberOfQuestions']){
 		//hide next button if next questions is last question
 		if((parseInt(currentQuestionNumber)+1)==customQuestionnaire['numberOfQuestions']){
 			$j('#add-questionnaire_nextButton').addClass('hidden');
 		}
-		var questionType = $j('#add-questionnaire_questionType').val();
-		var question = $j('#add-questionnaire_question').val();
-		customQuestionnaire['question'+currentQuestionNumber]={'questionType': questionType, 'question':question};
-		switch(questionType){
-			case "radio":{
-				var numberOfOptions = $j('#add-questionnaire_numberOfOptions').val();
-				customQuestionnaire['question'+currentQuestionNumber]['numberOfOptions'] = numberOfOptions;
-				switch(numberOfOptions){
-					case "5":
-						var option5 = $j('#add-questionnaire_option5').val();
-						customQuestionnaire['question'+currentQuestionNumber]['option5'] = option5;
-					case "4":
-						var option4 = $j('#add-questionnaire_option4').val();
-						customQuestionnaire['question'+currentQuestionNumber]['option4'] = option4;
-					case "3":
-						var option3 = $j('#add-questionnaire_option3').val();
-						customQuestionnaire['question'+currentQuestionNumber]['option3'] = option3;
-					case "2":
-						var option1 = $j('#add-questionnaire_option1').val();
-						var option2 = $j('#add-questionnaire_option2').val();
-						customQuestionnaire['question'+currentQuestionNumber]['option1'] = option1;
-						customQuestionnaire['question'+currentQuestionNumber]['option2'] = option2;
-						break;
-					default:
-						//print some error message
-						break;
-				}
-				break;
-			}
-			default:
-				//print some error message
-				break;
-		}
-		console.log(customQuestionnaire);
-
+		//save the question before clearing the screen
+		saveCurrentQuestion();
+		//clear the screen before updating
+		clearScreen();
 		//after saving the question, update the screen
 		updateScreen(parseInt(currentQuestionNumber)+1);
 
