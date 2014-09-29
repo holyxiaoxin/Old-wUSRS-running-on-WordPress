@@ -11,7 +11,7 @@ $j(document).ready(function() {
 
     //onclick handler for update number of questions button
     $j("#add-questionnaire_updateNumberOfQuestionsButton").click(function() {
-    	updateNumberOfQuestions();
+    	updateNumberOfQuestionsAndTitle();
     	$j(this).blur();	//unfocus button
 	});
 
@@ -70,11 +70,15 @@ function goToAddQuestionnaire(){
 /************************************/
 /*scripts for page-add-questionnaire*/
 /************************************/
-function updateNumberOfQuestions(){
-	var numberOfQuestions = $j("#add-questionnaire_numberOfQuestions").val();
+function updateNumberOfQuestionsAndTitle(){
+	var numberOfQuestions = $j('#add-questionnaire_numberOfQuestions').val();
+	var title = $j('#add-questionnaire_title').val();
 	console.log(numberOfQuestions);
 	//if update field is vaid:
-	if(numberOfQuestions == parseInt(numberOfQuestions) && parseInt(numberOfQuestions)>0){
+	if(numberOfQuestions == parseInt(numberOfQuestions) && parseInt(numberOfQuestions)>0 && title){
+		//updates title
+		customQuestionnaire['title']=title;
+		//updates number of questions
 		//shows question fields
 		$j('#add-questionnaire_questions').removeClass('disappear');
 		$j('.add-questionnaire_questionSlider').removeClass('disappear');
@@ -84,6 +88,10 @@ function updateNumberOfQuestions(){
 		customQuestionnaire['numberOfQuestions']=numberOfQuestions;
 		//check if updated before:
 		if(typeof customQuestionnaire['questions'] != 'undefined'){	//updated before
+			//save the question before clearing the screen
+			saveCurrentQuestion();
+			//after saving the question, update the screen to first question
+			updateScreen(1);
 			customQuestionnaire['questions'] = customQuestionnaire['questions'].slice(0,numberOfQuestions);
 		}else{
 			customQuestionnaire['questions'] = new Array(numberOfQuestions);
@@ -95,9 +103,15 @@ function updateNumberOfQuestions(){
 		for(i=0;i<numberOfQuestions;i++){
 			$j('#add-questionnaire_questionNumber').append(optionRow(i+1));
 		}
+
 	}else{
 		//throws error
-		alert("please use positive integers only");
+		if(!(numberOfQuestions == parseInt(numberOfQuestions) && parseInt(numberOfQuestions)>0)){
+			alert("please use positive integers only");
+		}
+		if(!title){
+			alert("title cannot be empty!");
+		}
 	}
 }
 

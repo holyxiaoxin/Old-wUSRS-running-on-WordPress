@@ -21,9 +21,11 @@ get_header(); ?>
 				<div class="custom-wrapper">
 					<table>
 						<tr>
+							<td>Title of Assessment</td>
 							<td>Number of questions</td>
 						</tr>
 						<tr>
+							<td><form><input type="text" id="add-questionnaire_title"></form></td>
 							<td><form><input type="text" id="add-questionnaire_numberOfQuestions"></form></td>
 							<td><button type="button" id="add-questionnaire_updateNumberOfQuestionsButton">Update</button></td>
 						</tr>

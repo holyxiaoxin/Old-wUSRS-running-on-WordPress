@@ -17,9 +17,11 @@ get_header(); ?>
 			<?php while ( have_posts() ) : the_post(); ?>
 
 				<?php get_template_part( 'content', 'page' ); ?>
-
 				<!--start of Custom Questionnaires-->
 				<div class="custom-wrapper">
+					<table>
+
+					</table>
 					<button type="button" id="custom-questionnaire_createButton" onclick="goToAddQuestionnaire();">Create New Assessment</button>
 				</div>
 
