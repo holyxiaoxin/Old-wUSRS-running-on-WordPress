@@ -1,55 +1,54 @@
 var $j = jQuery;
-var customQuestionnaire = new Array();
+var customAssessment = {};
 
 $j(document).ready(function() {
-
-	//onclick handler for go to page-add-questionnaire url
-	$j("#custom-questionnaire_createButton").click(function() {
-    	goToAddQuestionnaire();
+	//onclick handler for go to page-add-assessment url
+	$j("#custom-assessment_createButton").click(function() {
+    	goToAddAssessment();
     	$j(this).blur();	//unfocus button
 	});
 
     //onclick handler for update number of questions button
-    $j("#add-questionnaire_updateNumberOfQuestionsButton").click(function() {
+    $j("#add-assessment_updateNumberOfQuestionsButton").click(function() {
     	updateNumberOfQuestionsAndTitle();
     	$j(this).blur();	//unfocus button
 	});
 
     //onclick handler for question type dropdown
-    $j("#add-questionnaire_questionType").change(function() {
-    	var questionType = $j('#add-questionnaire_questionType').val();
+    $j("#add-assessment_questionType").change(function() {
+    	var questionType = $j('#add-assessment_questionType').val();
     	changeQuestionType(questionType);
 	});
 
 	//onclick handler for question number dropdown
-    $j("#add-questionnaire_questionNumber").on('focus', function () {
+    $j("#add-assessment_questionNumber").on('focus', function () {
         saveCurrentQuestion();
 	}).change(function() {
         // Do something with the previous value after the change
-        var questionNumber = $j('#add-questionnaire_questionNumber').val();
+        var questionNumber = $j('#add-assessment_questionNumber').val();
         updateScreen(questionNumber);
 	});
 
 	//onclick handler for update number options dropdown
-    $j("#add-questionnaire_numberOfOptions").change(function() {
+    $j("#add-assessment_numberOfOptions").change(function() {
     	var numberOfOptions = $j(this).val();
     	updateNumberOfOptions(numberOfOptions);
 	});
 
     //onclick handler for back button
-    $j("#add-questionnaire_backButton").click(function() {
+    $j("#add-assessment_backButton").click(function() {
     	previousQuestion();
     	$j(this).blur();	//unfocus button
 	});
 
 	//onclick handler for next button
-    $j("#add-questionnaire_nextButton").click(function() {
+    $j("#add-assessment_nextButton").click(function() {
     	nextQuestion();
     	$j(this).blur();	//unfocus button
 	});
 
 	//onclick handler for submit button
-    $j("#add-questionnaire_submitButton").click(function() {
+    $j("#add-assessment_submitButton").click(function() {
     	submitForm();
     	$j(this).blur();	//unfocus button
 	});
@@ -59,49 +58,48 @@ $j(document).ready(function() {
 });
 
 /***************************************/
-/*scripts for page-custom-questionnaire*/
+/*scripts for page-custom-assessment*/
 /***************************************/
 
-function goToAddQuestionnaire(){
+function goToAddAssessment(){
 	location.href = 'add-assessment';
 }
 
-
 /************************************/
-/*scripts for page-add-questionnaire*/
+/*scripts for page-add-assessment*/
 /************************************/
 function updateNumberOfQuestionsAndTitle(){
-	var numberOfQuestions = $j('#add-questionnaire_numberOfQuestions').val();
-	var title = $j('#add-questionnaire_title').val();
+	var numberOfQuestions = $j('#add-assessment_numberOfQuestions').val();
+	var title = $j('#add-assessment_title').val();
 	console.log(numberOfQuestions);
 	//if update field is vaid:
 	if(numberOfQuestions == parseInt(numberOfQuestions) && parseInt(numberOfQuestions)>0 && title){
 		//updates title
-		customQuestionnaire['title']=title;
+		customAssessment['title']=title;
 		//updates number of questions
 		//shows question fields
-		$j('#add-questionnaire_questions').removeClass('disappear');
-		$j('.add-questionnaire_questionSlider').removeClass('disappear');
+		$j('#add-assessment_questions').removeClass('disappear');
+		$j('.add-assessment_questionSlider').removeClass('disappear');
 		//remembers the number of questions, and update the question number dropdown
 		//if current question number > updated question number, jump back to last question number
 		//need some logic to update the question as well
-		customQuestionnaire['numberOfQuestions']=numberOfQuestions;
+		customAssessment['numberOfQuestions']=numberOfQuestions;
 		//check if updated before:
-		if(typeof customQuestionnaire['questions'] != 'undefined'){	//updated before
+		if(typeof customAssessment['questions'] != 'undefined'){	//updated before
 			//save the question before clearing the screen
 			saveCurrentQuestion();
 			//after saving the question, update the screen to first question
 			updateScreen(1);
-			customQuestionnaire['questions'] = customQuestionnaire['questions'].slice(0,numberOfQuestions);
+			customAssessment['questions'] = customAssessment['questions'].slice(0,numberOfQuestions);
 		}else{
-			customQuestionnaire['questions'] = new Array(numberOfQuestions);
+			customAssessment['questions'] = new Array(numberOfQuestions);
 		}
-		$j('#add-questionnaire_questionNumber').html("");
+		$j('#add-assessment_questionNumber').html("");
 		function optionRow(questionNumber){
 			return "<option value="+questionNumber+">"+questionNumber+"</option>";
 		}
 		for(i=0;i<numberOfQuestions;i++){
-			$j('#add-questionnaire_questionNumber').append(optionRow(i+1));
+			$j('#add-assessment_questionNumber').append(optionRow(i+1));
 		}
 
 	}else{
@@ -117,19 +115,19 @@ function updateNumberOfQuestionsAndTitle(){
 
 function clearScreen(){
 	//clear question
-	$j('#add-questionnaire_question').val("");
+	$j('#add-assessment_question').val("");
 	//reset question type to slider
-	$j('#add-questionnaire_questionType').val("slider");
+	$j('#add-assessment_questionType').val("slider");
 	//clear all the options
 	updateNumberOfOptions(2);
 	//reset the number of options
-	$j('#add-questionnaire_numberOfOptions').val('2');
+	$j('#add-assessment_numberOfOptions').val('2');
 	//reset options field
-	$j('#add-questionnaire_option1').val("");
-	$j('#add-questionnaire_option2').val("");
-	$j('#add-questionnaire_option3').val("");
-	$j('#add-questionnaire_option4').val("");
-	$j('#add-questionnaire_option5').val("");
+	$j('#add-assessment_option1').val("");
+	$j('#add-assessment_option2').val("");
+	$j('#add-assessment_option3').val("");
+	$j('#add-assessment_option4').val("");
+	$j('#add-assessment_option5').val("");
 }
 
 //takes care of updating the UI, fills in the fields if it was filled previously
@@ -138,49 +136,49 @@ function updateScreen(questionNumber){
 	clearScreen();
 	//takes care of rendering the proper UI
 	//hide next button if last question, else shows it
-	if(parseInt(questionNumber)==customQuestionnaire['numberOfQuestions']){
-		$j('#add-questionnaire_nextButton').addClass('hidden');
+	if(parseInt(questionNumber)==customAssessment["numberOfQuestions"]){
+		$j('#add-assessment_nextButton').addClass('hidden');
 	}else{
-		$j('#add-questionnaire_nextButton').removeClass('hidden');
+		$j('#add-assessment_nextButton').removeClass('hidden');
 	}
 	//hide back button if first question, else shows it
 	if(parseInt(questionNumber)==1){
-		$j('#add-questionnaire_backButton').addClass('hidden');
+		$j('#add-assessment_backButton').addClass('hidden');
 	}else{
-		$j('#add-questionnaire_backButton').removeClass('hidden');
+		$j('#add-assessment_backButton').removeClass('hidden');
 	}
 	//check if question number is valid
-	if(questionNumber<=customQuestionnaire['numberOfQuestions']){
+	if(questionNumber<=customAssessment['numberOfQuestions']){
 		//clears the whole screen
-		$j('.add-questionnaire_questionType').addClass('disappear');
+		$j('.add-assessment_questionType').addClass('disappear');
 		//updates the question number
-		$j('#add-questionnaire_questionNumber').val(parseInt(questionNumber));
+		$j('#add-assessment_questionNumber').val(parseInt(questionNumber));
 		//check if question was previously filled
-		if(typeof customQuestionnaire['questions'][questionNumber-1] != 'undefined'){
+		if(typeof customAssessment['questions'][questionNumber-1] != 'undefined'){
 			//fills in question
-			$j('#add-questionnaire_question').val(customQuestionnaire['questions'][questionNumber-1]['question']);
+			$j('#add-assessment_question').val(customAssessment['questions'][questionNumber-1]['question']);
 			//fills in question type
-			$j('#add-questionnaire_questionType').val(customQuestionnaire['questions'][questionNumber-1]['questionType']);
+			$j('#add-assessment_questionType').val(customAssessment['questions'][questionNumber-1]['questionType']);
 			//fills in other fields
-			switch(customQuestionnaire['questions'][questionNumber-1]['questionType']){
+			switch(customAssessment['questions'][questionNumber-1]['questionType']){
 				case "radio":{
-					switch(customQuestionnaire['questions'][questionNumber-1]['numberOfOptions']){
+					switch(customAssessment['questions'][questionNumber-1]['numberOfOptions']){
 						case "5":
-							$j('#add-questionnaire_option5').val(customQuestionnaire['questions'][questionNumber-1]['option5']);
+							$j('#add-assessment_option5').val(customAssessment['questions'][questionNumber-1]['option5']);
 						case "4":
-							$j('#add-questionnaire_option4').val(customQuestionnaire['questions'][questionNumber-1]['option4']);
+							$j('#add-assessment_option4').val(customAssessment['questions'][questionNumber-1]['option4']);
 						case "3":
-							$j('#add-questionnaire_option3').val(customQuestionnaire['questions'][questionNumber-1]['option3']);
+							$j('#add-assessment_option3').val(customAssessment['questions'][questionNumber-1]['option3']);
 						case "2":
-							$j('#add-questionnaire_option1').val(customQuestionnaire['questions'][questionNumber-1]['option1']);
-							$j('#add-questionnaire_option2').val(customQuestionnaire['questions'][questionNumber-1]['option2']);
+							$j('#add-assessment_option1').val(customAssessment['questions'][questionNumber-1]['option1']);
+							$j('#add-assessment_option2').val(customAssessment['questions'][questionNumber-1]['option2']);
 						default:
 							//pring some error message
 							break;
 					}
 					//opens up the number of options previously remembered
-					updateNumberOfOptions(customQuestionnaire['questions'][questionNumber-1]['numberOfOptions']);
-					$j('.add-questionnaire_questionRadio').removeClass('disappear');
+					updateNumberOfOptions(customAssessment['questions'][questionNumber-1]['numberOfOptions']);
+					$j('.add-assessment_questionRadio').removeClass('disappear');
 					break;
 				}
 				default:
@@ -197,11 +195,11 @@ function updateScreen(questionNumber){
 function changeQuestionType(questionType){
 	switch(questionType){
 		case "slider":
-			$j('.add-questionnaire_questionType').addClass('disappear');
+			$j('.add-assessment_questionType').addClass('disappear');
 			break;
 		case "radio":
-			$j('.add-questionnaire_questionType').addClass('disappear');
-			$j('.add-questionnaire_questionRadio').removeClass('disappear');
+			$j('.add-assessment_questionType').addClass('disappear');
+			$j('.add-assessment_questionRadio').removeClass('disappear');
 			break;
 	// 	case "checkbox":
 	// 		break;
@@ -212,37 +210,37 @@ function changeQuestionType(questionType){
 }
 
 function updateNumberOfOptions(numberOfOptions){
-	$j('.add-questionnaire_optionRow5').addClass('disappear');
+	$j('.add-assessment_optionRow5').addClass('disappear');
 	if(numberOfOptions>2){
-		$j('.add-questionnaire_optionRow'+numberOfOptions).removeClass('disappear');
+		$j('.add-assessment_optionRow'+numberOfOptions).removeClass('disappear');
 	}
 }
 
 function saveCurrentQuestion(){
-	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
+	var currentQuestionNumber = $j('#add-assessment_questionNumber').val();
 	console.log("currentQuestionNumber is: "+currentQuestionNumber);
-	var questionType = $j('#add-questionnaire_questionType').val();
-	var question = $j('#add-questionnaire_question').val();
-	customQuestionnaire['questions'][currentQuestionNumber-1]={'questionType': questionType, 'question':question};
+	var questionType = $j('#add-assessment_questionType').val();
+	var question = $j('#add-assessment_question').val();
+	customAssessment['questions'][currentQuestionNumber-1]={'questionType': questionType, 'question':question};
 	switch(questionType){
 		case "radio":{
-			var numberOfOptions = $j('#add-questionnaire_numberOfOptions').val();
-			customQuestionnaire['questions'][currentQuestionNumber-1]['numberOfOptions'] = numberOfOptions;
+			var numberOfOptions = $j('#add-assessment_numberOfOptions').val();
+			customAssessment['questions'][currentQuestionNumber-1]['numberOfOptions'] = numberOfOptions;
 			switch(numberOfOptions){
 				case "5":
-					var option5 = $j('#add-questionnaire_option5').val();
-					customQuestionnaire['questions'][currentQuestionNumber-1]['option5'] = option5;
+					var option5 = $j('#add-assessment_option5').val();
+					customAssessment['questions'][currentQuestionNumber-1]['option5'] = option5;
 				case "4":
-					var option4 = $j('#add-questionnaire_option4').val();
-					customQuestionnaire['questions'][currentQuestionNumber-1]['option4'] = option4;
+					var option4 = $j('#add-assessment_option4').val();
+					customAssessment['questions'][currentQuestionNumber-1]['option4'] = option4;
 				case "3":
-					var option3 = $j('#add-questionnaire_option3').val();
-					customQuestionnaire['questions'][currentQuestionNumber-1]['option3'] = option3;
+					var option3 = $j('#add-assessment_option3').val();
+					customAssessment['questions'][currentQuestionNumber-1]['option3'] = option3;
 				case "2":
-					var option1 = $j('#add-questionnaire_option1').val();
-					var option2 = $j('#add-questionnaire_option2').val();
-					customQuestionnaire['questions'][currentQuestionNumber-1]['option1'] = option1;
-					customQuestionnaire['questions'][currentQuestionNumber-1]['option2'] = option2;
+					var option1 = $j('#add-assessment_option1').val();
+					var option2 = $j('#add-assessment_option2').val();
+					customAssessment['questions'][currentQuestionNumber-1]['option1'] = option1;
+					customAssessment['questions'][currentQuestionNumber-1]['option2'] = option2;
 					break;
 				default:
 					//print some error message
@@ -254,16 +252,16 @@ function saveCurrentQuestion(){
 			//print some error message
 			break;
 	}
-	console.log(customQuestionnaire);
+	console.log(customAssessment);
 }
 
 function nextQuestion(){
-	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
+	var currentQuestionNumber = $j('#add-assessment_questionNumber').val();
 	//checks if next button is valid
-	if (parseInt(currentQuestionNumber)<customQuestionnaire['numberOfQuestions']){
+	if (parseInt(currentQuestionNumber)<customAssessment['numberOfQuestions']){
 		//hide next button if next questions is last question
-		if((parseInt(currentQuestionNumber)+1)==customQuestionnaire['numberOfQuestions']){
-			$j('#add-questionnaire_nextButton').addClass('hidden');
+		if((parseInt(currentQuestionNumber)+1)==customAssessment['numberOfQuestions']){
+			$j('#add-assessment_nextButton').addClass('hidden');
 		}
 		//save the question before clearing the screen
 		saveCurrentQuestion();
@@ -271,7 +269,7 @@ function nextQuestion(){
 		updateScreen(parseInt(currentQuestionNumber)+1);
 		//adds back button if next question is 2, that could be navigated back to 1.
 		if(currentQuestionNumber==1){
-			$j('#add-questionnaire_backButton').removeClass('hidden');
+			$j('#add-assessment_backButton').removeClass('hidden');
 		}
 	}else{	//next button is triggered illegally
 		//print some error message
@@ -280,12 +278,12 @@ function nextQuestion(){
 }
 
 function previousQuestion(){
-	var currentQuestionNumber = $j('#add-questionnaire_questionNumber').val();
+	var currentQuestionNumber = $j('#add-assessment_questionNumber').val();
 	//checks if previous button is valid
 	if (parseInt(currentQuestionNumber)>1){
 		//hide back button if previous questions is first question
 		if((parseInt(currentQuestionNumber)-1)==1){
-			$j('#add-questionnaire_backButton').addClass('hidden');
+			$j('#add-assessment_backButton').addClass('hidden');
 		}
 		//save the question before clearing the screen
 		saveCurrentQuestion();
@@ -301,14 +299,13 @@ function submitForm(){
 	//save the question before submitting
 	saveCurrentQuestion();
 
-	console.log("customQuestionnaire: ");
-	console.log(customQuestionnaire);
+	console.log("customAssessment: ");
+	console.log(customAssessment);
 
-	// $j.post( "../../../api/post.php", function( data ) {
-	$j.get( "http://jiarong.me/painapp/api/post.php", function( data ) {
-	  alert( "Data Saved: " + data );
-	});
-
+	$j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'set','data':customAssessment})
+		.done( function( data ) {
+	  		alert( "Data Saved: " + data );
+		});
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-	header('Content-Type: application/json');
+	// header('Content-Type: application/json');
 	header('Access-Control-Allow-Origin: *');
 	require_once('../wordpress/wp-blog-header.php');
 
@@ -56,28 +56,79 @@
 	  'comment_status' =>  'closed'  // Default is the option 'default_comment_status', or 'closed'.
 	);  
 
-	$result = wp_insert_post( $post, true );
+	// $result = wp_insert_post( $post, true );
 
-	if (is_wp_error($result)) {
-		$response['error'] = 1;
-	   	$error_string = $result->get_error_message();
-	   	$response['errorstring'] = $error_string;
-	}else{
-		$post_id = $result;
-		$response['postid'] = $result;
-		$result = add_post_meta($post_id, 'type', 'scale', true);
-		if(!is_wp_error($result)){
-			$result = add_post_meta($post_id, 'data', $meta_value, true);
-			if (!$result){
-				$response['error'] = 1;
-			   	$response['errorstring'] = $result;
-			}else{
-				$response['success'] = 1;
-				$response['meta_id'] = $result;
+	// if (is_wp_error($result)) {
+	// 	$response['error'] = 1;
+	//    	$error_string = $result->get_error_message();
+	//    	$response['errorstring'] = $error_string;
+	// }else{
+	// 	$post_id = $result;
+	// 	$response['postid'] = $result;
+	// 	$result = add_post_meta($post_id, 'type', 'scale', true);
+	// 	if(!is_wp_error($result)){
+	// 		$result = add_post_meta($post_id, 'data', $meta_value, true);
+	// 		if (!$result){
+	// 			$response['error'] = 1;
+	// 		   	$response['errorstring'] = $result;
+	// 		}else{
+	// 			$response['success'] = 1;
+	// 			$response['meta_id'] = $result;
+	// 		}
+	// 	}		
+	// }
+
+	if(isset($_POST['tag'])){
+		switch($_POST['tag']){
+			case 'set':{
+				if(isset($_POST['data'])){
+					$data = $_POST['data'];
+
+					$post = array(
+					  'post_content'   =>  'description',  // The full text of the post.
+					  'post_name'      =>  'test slug',  // The name (slug) for your post
+					  'post_title'     =>  $data['title'],  // The title of your post.
+					  'post_status'    =>  'publish', // Default 'draft'.
+					  'post_type'      =>  'post',  // Default 'post'.
+					  'comment_status' =>  'closed'  // Default is the option 'default_comment_status', or 'closed'.
+					);
+					$result = wp_insert_post($post,true);
+
+					if (is_wp_error($result)) {
+						$response['error'] = 1;
+					   	$error_string = $result->get_error_message();
+					   	$response['errorstring'] = $error_string;
+					}else{
+						$post_id = $result;
+						$response['postid'] = $result;
+						if(isset($data['numberOfQuestions'])){
+							$result = add_post_meta($post_id, "type", "scale", true);
+							if($result){
+								$result = add_post_meta($post_id, 'numberOfQuestions', $data['numberOfQuestions'], true);
+								if (!$result){
+									$response['error'] = 1;
+								   	$response['errorstring'] = "fail adding post meta";
+								}else{
+									$response['success'] = 1;
+									$response['meta_id'] = $result;
+								}
+							}else{
+								$response['error'] = 1;
+								$response['errorstring'] = "fail adding post meta";
+							}
+						}
+					}
+				}else{
+					$response['error'] = 1;
+				}
+				break;
 			}
-		}		
+			default:
+			//throw some error message
+		}
+	}else{
+		$response['error'] = 1;
 	}
-
 	echo json_encode($response);
 
 ?>

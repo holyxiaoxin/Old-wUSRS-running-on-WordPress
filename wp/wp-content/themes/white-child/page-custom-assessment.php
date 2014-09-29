@@ -19,10 +19,41 @@ get_header(); ?>
 				<?php get_template_part( 'content', 'page' ); ?>
 				<!--start of Custom Questionnaires-->
 				<div class="custom-wrapper">
-					<table>
+					<!-- <table id="custom-assessment_table">
+						<tr>
+							<td>Assessment Id</td>
+							<td>Assessment Title</td>
+						</tr>
+					</table> -->
 
-					</table>
-					<button type="button" id="custom-questionnaire_createButton" onclick="goToAddQuestionnaire();">Create New Assessment</button>
+					<?php
+					//$args = array( 'posts_per_page' => 3 );
+					$lastposts = get_posts();
+					foreach ( $lastposts as $post ) :
+					  setup_postdata( $post ); ?>
+						<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+						<?php the_content(); ?>
+						<?php 
+							$numberOfQuestions = get_post_meta( get_the_ID(), 'numberOfQuestions', true );
+							// check if the custom field has a value
+							if( ! empty( $numberOfQuestions ) ) {
+								echo "number of questions: ".$numberOfQuestions;
+							}
+						?>
+					<?php endforeach; 
+					wp_reset_postdata(); ?>
+
+
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+
+
+
+					<br>
+					<button type="button" id="custom-assessment_createButton">Create New Assessment</button>
 				</div>
 
 			<?php endwhile; // end of the loop. ?>
