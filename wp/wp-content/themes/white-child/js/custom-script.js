@@ -50,7 +50,7 @@ $j(document).ready(function() {
 
 	//onclick handler for submit button
     $j("#add-questionnaire_submitButton").click(function() {
-    	alert("does nothing at the moment");
+    	submitForm();
     	$j(this).blur();	//unfocus button
 	});
 
@@ -63,7 +63,7 @@ $j(document).ready(function() {
 /***************************************/
 
 function goToAddQuestionnaire(){
-	location.href = 'add-questionnaire';
+	location.href = 'add-assessment';
 }
 
 
@@ -82,6 +82,12 @@ function updateNumberOfQuestions(){
 		//if current question number > updated question number, jump back to last question number
 		//need some logic to update the question as well
 		customQuestionnaire['numberOfQuestions']=numberOfQuestions;
+		//check if updated before:
+		if(typeof customQuestionnaire['questions'] != 'undefined'){	//updated before
+			customQuestionnaire['questions'] = customQuestionnaire['questions'].slice(0,numberOfQuestions);
+		}else{
+			customQuestionnaire['questions'] = new Array(numberOfQuestions);
+		}
 		$j('#add-questionnaire_questionNumber').html("");
 		function optionRow(questionNumber){
 			return "<option value="+questionNumber+">"+questionNumber+"</option>";
@@ -136,30 +142,30 @@ function updateScreen(questionNumber){
 		//updates the question number
 		$j('#add-questionnaire_questionNumber').val(parseInt(questionNumber));
 		//check if question was previously filled
-		if(typeof customQuestionnaire['question'+questionNumber] != 'undefined'){
+		if(typeof customQuestionnaire['questions'][questionNumber-1] != 'undefined'){
 			//fills in question
-			$j('#add-questionnaire_question').val(customQuestionnaire['question'+questionNumber]['question']);
+			$j('#add-questionnaire_question').val(customQuestionnaire['questions'][questionNumber-1]['question']);
 			//fills in question type
-			$j('#add-questionnaire_questionType').val(customQuestionnaire['question'+questionNumber]['questionType']);
+			$j('#add-questionnaire_questionType').val(customQuestionnaire['questions'][questionNumber-1]['questionType']);
 			//fills in other fields
-			switch(customQuestionnaire['question'+questionNumber]['questionType']){
+			switch(customQuestionnaire['questions'][questionNumber-1]['questionType']){
 				case "radio":{
-					switch(customQuestionnaire['question'+questionNumber]['numberOfOptions']){
+					switch(customQuestionnaire['questions'][questionNumber-1]['numberOfOptions']){
 						case "5":
-							$j('#add-questionnaire_option5').val(customQuestionnaire['question'+questionNumber]['option5']);
+							$j('#add-questionnaire_option5').val(customQuestionnaire['questions'][questionNumber-1]['option5']);
 						case "4":
-							$j('#add-questionnaire_option4').val(customQuestionnaire['question'+questionNumber]['option4']);
+							$j('#add-questionnaire_option4').val(customQuestionnaire['questions'][questionNumber-1]['option4']);
 						case "3":
-							$j('#add-questionnaire_option3').val(customQuestionnaire['question'+questionNumber]['option3']);
+							$j('#add-questionnaire_option3').val(customQuestionnaire['questions'][questionNumber-1]['option3']);
 						case "2":
-							$j('#add-questionnaire_option1').val(customQuestionnaire['question'+questionNumber]['option1']);
-							$j('#add-questionnaire_option2').val(customQuestionnaire['question'+questionNumber]['option2']);
+							$j('#add-questionnaire_option1').val(customQuestionnaire['questions'][questionNumber-1]['option1']);
+							$j('#add-questionnaire_option2').val(customQuestionnaire['questions'][questionNumber-1]['option2']);
 						default:
 							//pring some error message
 							break;
 					}
 					//opens up the number of options previously remembered
-					updateNumberOfOptions(customQuestionnaire['question'+questionNumber]['numberOfOptions']);
+					updateNumberOfOptions(customQuestionnaire['questions'][questionNumber-1]['numberOfOptions']);
 					$j('.add-questionnaire_questionRadio').removeClass('disappear');
 					break;
 				}
@@ -203,26 +209,26 @@ function saveCurrentQuestion(){
 	console.log("currentQuestionNumber is: "+currentQuestionNumber);
 	var questionType = $j('#add-questionnaire_questionType').val();
 	var question = $j('#add-questionnaire_question').val();
-	customQuestionnaire['question'+currentQuestionNumber]={'questionType': questionType, 'question':question};
+	customQuestionnaire['questions'][currentQuestionNumber-1]={'questionType': questionType, 'question':question};
 	switch(questionType){
 		case "radio":{
 			var numberOfOptions = $j('#add-questionnaire_numberOfOptions').val();
-			customQuestionnaire['question'+currentQuestionNumber]['numberOfOptions'] = numberOfOptions;
+			customQuestionnaire['questions'][currentQuestionNumber-1]['numberOfOptions'] = numberOfOptions;
 			switch(numberOfOptions){
 				case "5":
 					var option5 = $j('#add-questionnaire_option5').val();
-					customQuestionnaire['question'+currentQuestionNumber]['option5'] = option5;
+					customQuestionnaire['questions'][currentQuestionNumber-1]['option5'] = option5;
 				case "4":
 					var option4 = $j('#add-questionnaire_option4').val();
-					customQuestionnaire['question'+currentQuestionNumber]['option4'] = option4;
+					customQuestionnaire['questions'][currentQuestionNumber-1]['option4'] = option4;
 				case "3":
 					var option3 = $j('#add-questionnaire_option3').val();
-					customQuestionnaire['question'+currentQuestionNumber]['option3'] = option3;
+					customQuestionnaire['questions'][currentQuestionNumber-1]['option3'] = option3;
 				case "2":
 					var option1 = $j('#add-questionnaire_option1').val();
 					var option2 = $j('#add-questionnaire_option2').val();
-					customQuestionnaire['question'+currentQuestionNumber]['option1'] = option1;
-					customQuestionnaire['question'+currentQuestionNumber]['option2'] = option2;
+					customQuestionnaire['questions'][currentQuestionNumber-1]['option1'] = option1;
+					customQuestionnaire['questions'][currentQuestionNumber-1]['option2'] = option2;
 					break;
 				default:
 					//print some error message
@@ -276,4 +282,21 @@ function previousQuestion(){
 		console.log("ERROR: back button is triggered illegally");
 	}
 }
+
+function submitForm(){
+	//save the question before submitting
+	saveCurrentQuestion();
+
+	console.log("customQuestionnaire: ");
+	console.log(customQuestionnaire);
+
+	// $j.post( "../../../api/post.php", function( data ) {
+	$j.get( "http://jiarong.me/painapp/api/post.php", function( data ) {
+	  alert( "Data Saved: " + data );
+	});
+
+}
+
+
+
 

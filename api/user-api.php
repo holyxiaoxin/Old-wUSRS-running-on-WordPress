@@ -1,5 +1,6 @@
 <?php
 	header('Content-Type: application/json');
+	header('Access-Control-Allow-Origin: *');
 	require_once('/home/jiarhcah/public_html/painapp/wordpress/wp-blog-header.php');
 
 	$response = array('status' => 'ok', 'tag' => '', 'success' => 0, 'error' => 0);
