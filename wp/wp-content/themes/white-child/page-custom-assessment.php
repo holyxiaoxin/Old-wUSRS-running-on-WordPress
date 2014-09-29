@@ -35,7 +35,6 @@ get_header(); ?>
 						<?php the_content(); ?>
 						<?php 
 							$data = get_post_meta( get_the_ID(), 'data', true );
-							// check if the custom field has a value
 							if(!empty($data)) {
 								if($data['numberOfQuestions']){
 									echo "number of questions: ".$data['numberOfQuestions'];

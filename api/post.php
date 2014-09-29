@@ -1,5 +1,5 @@
 <?php
-	// header('Content-Type: application/json');
+	header('Content-Type: application/json');
 	header('Access-Control-Allow-Origin: *');
 	require_once('../wordpress/wp-blog-header.php');
 
@@ -75,7 +75,7 @@
 			case 'set':{
 				if(isset($_POST['data'])){
 					$data = $_POST['data'];
-
+					//setting up the post fields
 					$post = array(
 					  'post_content'   =>  'description',  // The full text of the post.
 					  'post_name'      =>  'test slug',  // The name (slug) for your post
@@ -93,8 +93,11 @@
 					}else{
 						$post_id = $result;
 						$response['postid'] = $result;
+						//setting up the postmeta to go along with the post
+						//the postmeta-type identifies that this post is a scale assessment
 						$result = add_post_meta($post_id, "type", "scale", true);
 						if($result){
+							//the postmeta-data contains the assessment's fields/options
 							$result = add_post_meta($post_id, 'data', $data, true);
 							if (!$result){
 								$response['error'] = 1;
@@ -111,6 +114,22 @@
 				}else{
 					$response['error'] = 1;
 				}
+				break;
+			}
+			case 'get':{
+				$response['posts'] = array();
+				$lastposts = get_posts();
+					foreach ( $lastposts as $post ) :
+					  setup_postdata( $post ); 
+						$newPost = array();
+						$newPost['title'] = the_title(); 
+						$newPost['desciption'] = the_content();
+						$data = get_post_meta( get_the_ID(), 'data', true );
+						if(!empty($data)) {
+							$newPost[] = $data;
+						}
+						$response['posts'][] = $newPost;
+					endforeach;
 				break;
 			}
 			default:
