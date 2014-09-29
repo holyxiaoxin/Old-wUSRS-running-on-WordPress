@@ -34,10 +34,12 @@ get_header(); ?>
 						<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 						<?php the_content(); ?>
 						<?php 
-							$numberOfQuestions = get_post_meta( get_the_ID(), 'numberOfQuestions', true );
+							$data = get_post_meta( get_the_ID(), 'data', true );
 							// check if the custom field has a value
-							if( ! empty( $numberOfQuestions ) ) {
-								echo "number of questions: ".$numberOfQuestions;
+							if(!empty($data)) {
+								if($data['numberOfQuestions']){
+									echo "number of questions: ".$data['numberOfQuestions'];
+								}
 							}
 						?>
 					<?php endforeach; 

@@ -12,14 +12,6 @@
 	$response['postid'] = 0;
 	$response['errorstring'] = '';
 
-	$meta_value = array();
-
-	$meta_value['numberOfQuestions'] = 2;
-	$meta_value['question1'] = array('question'=>'q1', 'questionType'=>'slider');
-	$meta_value['question2'] = array('question'=>'q2', 'questionType'=>'slider');
-
-
-
 // $post = array(
 // 	  'ID'             => [ <post id> ] // Are you updating an existing post?
 // 	  'post_content'   => [ <string> ] // The full text of the post.
@@ -101,21 +93,19 @@
 					}else{
 						$post_id = $result;
 						$response['postid'] = $result;
-						if(isset($data['numberOfQuestions'])){
-							$result = add_post_meta($post_id, "type", "scale", true);
-							if($result){
-								$result = add_post_meta($post_id, 'numberOfQuestions', $data['numberOfQuestions'], true);
-								if (!$result){
-									$response['error'] = 1;
-								   	$response['errorstring'] = "fail adding post meta";
-								}else{
-									$response['success'] = 1;
-									$response['meta_id'] = $result;
-								}
-							}else{
+						$result = add_post_meta($post_id, "type", "scale", true);
+						if($result){
+							$result = add_post_meta($post_id, 'data', $data, true);
+							if (!$result){
 								$response['error'] = 1;
-								$response['errorstring'] = "fail adding post meta";
+							   	$response['errorstring'] = "fail adding post meta";
+							}else{
+								$response['success'] = 1;
+								$response['meta_id'] = $result;
 							}
+						}else{
+							$response['error'] = 1;
+							$response['errorstring'] = "fail adding post meta";
 						}
 					}
 				}else{
