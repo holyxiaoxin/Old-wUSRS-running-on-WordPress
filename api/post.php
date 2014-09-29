@@ -9,7 +9,6 @@
 	$response = array('status' => 'ok', 'tag' => '', 'success' => 0, 'error' => 0);
 	$response['success'] = 0;
 	$response['error'] = 0;
-	$response['postid'] = 0;
 	$response['errorstring'] = '';
 
 // $post = array(
@@ -121,14 +120,10 @@
 				$lastposts = get_posts();
 					foreach ( $lastposts as $post ) :
 					  setup_postdata( $post ); 
-						$newPost = array();
-						$newPost['title'] = the_title(); 
-						$newPost['desciption'] = the_content();
 						$data = get_post_meta( get_the_ID(), 'data', true );
 						if(!empty($data)) {
-							$newPost[] = $data;
+							$response['posts'][] = $data;
 						}
-						$response['posts'][] = $newPost;
 					endforeach;
 				break;
 			}

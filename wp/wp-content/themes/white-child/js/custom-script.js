@@ -306,6 +306,13 @@ function submitForm(){
 		.done( function( data ) {
 	  		alert( "Data Saved: " + data );
 		});
+
+	//debug for get post
+	// $j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'get'})
+	// 	.done( function( data ) {
+	//   		alert( "Data Recieved: " + data );
+	// 	});
+
 }
 
 
