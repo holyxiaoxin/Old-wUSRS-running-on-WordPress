@@ -12,111 +12,119 @@ Template Name: Add-Questionnaire
 get_header(); ?>
 
 	<div id="primary-mono" class="content-area col-md-12">
-		<main id="main" class="site-main" role="main">
 
-			<?php while ( have_posts() ) : the_post(); ?>
 
 				<?php get_template_part( 'content', 'page' ); ?>
 				<!--start of Add Questionnaire-->
-				<div class="custom-wrapper">
-					<table>
-						<tr>
-							<td>Title of Assessment</td>
-							<td>Number of questions</td>
-						</tr>
-						<tr>
-							<td><form><input type="text" id="add-assessment_title"></form></td>
-							<td><form><input type="text" id="add-assessment_numberOfQuestions"></form></td>
-							<td><button type="button" id="add-assessment_updateNumberOfQuestionsButton">Update</button></td>
-						</tr>
-						<!--add empty row inside a table-->
-						<tr><td>&nbsp;<td></tr>
-						
-					</table>
 
-					<table id="add-assessment_questions" class="disappear">
-						<tr>
- 							<td>Question Type</td>
- 							<td>Question Number</td>
- 							<td>Question</td>
- 						</tr>
- 						<!--add a <hr> line inside table-->
- 						<tr>
- 							<td><hr></td><td><hr></td><td><hr></td>
- 						</tr>
+					<form role="form">
+						<div class="form-group">
+							<label for="assessmentTitle">Title of Assessment</label>
+							<input type="text" class="form-control" id="add-assessment_title" placeholder="Enter Title">
+						</div>
 
- 						<tr>
-		 					<td><select id="add-assessment_questionType">
-		   							<option value="slider">Slider</option>
-		   							<option value="radio">Radio</option>
-		 						</select></td>
-		 					<td><select id="add-assessment_questionNumber">
-		   							<option value="1">1</option>
-		 						</select></td>
-		 					<td><form><input type='text' id="add-assessment_question"></form></td>
-						</tr>
-					</table>
-					<!--Radio-->
-					<table class="add-assessment_questionRadio add-assessment_questionType disappear">
-						<tr><td>&nbsp;<td></tr>
-						<tr>
-							<td>Number Of Options</td>
- 							<td>Option Number</td>
- 							<td>Option</td>
-						</tr>
-						<!--add a <hr> line inside table-->
- 						<tr>
- 							<td><hr></td><td><hr></td><td><hr></td>
- 						</tr>
-						<tr>
-							<td><select id="add-assessment_numberOfOptions">
-		   							<option value="2">2</option>
-		   							<option value="3">3</option>
-		   							<option value="4">4</option>
-		   							<option value="5">5</option>
-		 						</select></td>
-							<td>Op 1</td>
-							<td><form><input type="text" id="add-assessment_option1"></form></td>
-						</tr>
-						<tr class="add-assessment_questionRadio add-assessment_questionType disappear">
-							<td></td>
-							<td>Op 2</td>
-							<td><form><input type="text" id="add-assessment_option2"></form></td>
-						</tr>
+						<table id="add-assessment_questions" class="table table-hover">
+							<thead>
+								<th class="col-md-1">#</th>
+	 							<th class="col-md-1">Qn. Type</th>
+	 							<th class="col-md-5">Question</th>
+	 							<th class="col-md-5">Option</th>
+	 						</thead>
+	 						<tbody></tbody>
+	 					</table>
 
-						<tr class="add-assessment_optionRow3 add-assessment_optionRow4 add-assessment_optionRow5 add-assessment_questionType disappear">
-							<td></td>
-							<td>Op 3</td>
-							<td><form><input type="text" id="add-assessment_option3"></form></td>
-						</tr>
-						<tr class="add-assessment_optionRow4 add-assessment_optionRow5 add-assessment_questionType disappear">
-							<td></td>
-							<td>Op 4</td>
-							<td><form><input type="text" id="add-assessment_option4"></form></td>
-						</tr>
-						<tr class="add-assessment_optionRow5 add-assessment_questionType disappear">
-							<td></td>
-							<td>Op 5</td>
-							<td><form><input type="text" id="add-assessment_option5"></form></td>
-						</tr>
-					</table>
+	 					<div class="row">
+	 						<div class="col-md-2">
+	 							<select class="form-control" id="add-assessment_questionType">
+			   							<option value="slider">Slider</option>
+			   							<option value="radio">Radio</option>
+			 					</select>
+							</div>
+							<div class="col-md-5">
+								<textarea class="form-control add-assessment_newQuestion" rows="3" id="add-assessment_question" placeholder="Enter Question"></textarea>
+							</div>
+							<div class="col-md-5">
+								<input type='text' class="form-control add-assessment_newQuestion" id="add-assessment_option" placeholder="No need for options" disabled></input>
+							</div>
+						</div>
 
-					<table>
-						<tr>
-							<td><button type="button" id="add-assessment_backButton" class="hidden">Back</button></td>
-							<td><button type="button" id="add-assessment_nextButton">Next</button></td>
-						</tr>
-						<tr>
-							<td><button type="button" id="add-assessment_submitButton">Submit</button></td>
-						</tr>
-					</table>
-				</div>
+						<div class="col-xs-7">
+							<table class="table">
+								<thead><th>New Question</th></thead>
+								<tr>
+									<td id="add-assessment_newQuestion" class="add-assessment_newQuestion"></td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-xs-5">
+							<table class="table">
+								<thead><th>New Options</th></thead>
+								<tr>
+									<td id="add-assessment_newOptions" class="add-assessment_newQuestion"></td>
+								</tr>
+							</table>
+						</div>
 
-			<?php endwhile; // end of the loop. ?>
+
+						<!--Radio-->
+						<table class="add-assessment_questionRadio add-assessment_questionType disappear">
+							<tr><td>&nbsp;<td></tr>
+							<tr>
+								<td>Number Of Options</td>
+	 							<td>Option Number</td>
+	 							<td>Option</td>
+							</tr>
+							<!--add a <hr> line inside table-->
+	 						<tr>
+	 							<td><hr></td><td><hr></td><td><hr></td>
+	 						</tr>
+							<tr>
+								<td><select id="add-assessment_numberOfOptions">
+			   							<option value="2">2</option>
+			   							<option value="3">3</option>
+			   							<option value="4">4</option>
+			   							<option value="5">5</option>
+			 						</select></td>
+								<td>Op 1</td>
+								<td><form><input type="text" id="add-assessment_option1"></form></td>
+							</tr>
+							<tr class="add-assessment_questionRadio add-assessment_questionType disappear">
+								<td></td>
+								<td>Op 2</td>
+								<td><form><input type="text" id="add-assessment_option2"></form></td>
+							</tr>
+
+							<tr class="add-assessment_optionRow3 add-assessment_optionRow4 add-assessment_optionRow5 add-assessment_questionType disappear">
+								<td></td>
+								<td>Op 3</td>
+								<td><form><input type="text" id="add-assessment_option3"></form></td>
+							</tr>
+							<tr class="add-assessment_optionRow4 add-assessment_optionRow5 add-assessment_questionType disappear">
+								<td></td>
+								<td>Op 4</td>
+								<td><form><input type="text" id="add-assessment_option4"></form></td>
+							</tr>
+							<tr class="add-assessment_optionRow5 add-assessment_questionType disappear">
+								<td></td>
+								<td>Op 5</td>
+								<td><form><input type="text" id="add-assessment_option5"></form></td>
+							</tr>
+						</table>
+
+						<table class="col-md-12">
+							<tr>
+								<!-- <td><button type="button" id="add-assessment_backButton" class="hidden">Back</button></td> -->
+								<td><button class="pull-right" type="button" id="add-assessment_addButton">Add</button></td>
+							</tr>
+							<tr>
+								<td><button type="button" id="add-assessment_submitButton">Submit</button></td>
+							</tr>
+						</table>
+					</form>
+
 
 			
 
-		</main><!-- #main -->
 	</div><!-- #primary -->
 
 

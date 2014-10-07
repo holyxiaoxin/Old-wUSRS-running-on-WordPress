@@ -1,57 +1,80 @@
 var $j = jQuery;
-var customAssessment = {};
+var customAssessment = {'numberOfQuestions':"1"};
+customAssessment['questions']=[];
 
 $j(document).ready(function() {
 	//onclick handler for go to page-add-assessment url
-	$j("#custom-assessment_createButton").click(function() {
+	$j('#custom-assessment_createButton').click(function() {
     	goToAddAssessment();
     	$j(this).blur();	//unfocus button
 	});
 
-    //onclick handler for update number of questions button
-    $j("#add-assessment_updateNumberOfQuestionsButton").click(function() {
-    	updateNumberOfQuestionsAndTitle();
-    	$j(this).blur();	//unfocus button
-	});
+ //    //onclick handler for update number of questions button
+ //    $j("#add-assessment_updateNumberOfQuestionsButton").click(function() {
+ //    	updateNumberOfQuestionsAndTitle();
+ //    	$j(this).blur();	//unfocus button
+	// });
 
     //onclick handler for question type dropdown
-    $j("#add-assessment_questionType").change(function() {
+    $j('#add-assessment_questionType').change(function() {
     	var questionType = $j('#add-assessment_questionType').val();
     	changeQuestionType(questionType);
 	});
 
-	//onclick handler for question number dropdown
-    $j("#add-assessment_questionNumber").on('focus', function () {
-        saveCurrentQuestion();
-	}).change(function() {
-        // Do something with the previous value after the change
-        var questionNumber = $j('#add-assessment_questionNumber').val();
-        updateScreen(questionNumber);
+	// //onclick handler for question number dropdown
+ //    $j("#add-assessment_questionNumber").on('focus', function () {
+ //        saveCurrentQuestion();
+	// }).change(function() {
+ //        // Do something with the previous value after the change
+ //        var questionNumber = $j('#add-assessment_questionNumber').val();
+ //        updateScreen(questionNumber);
+	// });
+
+	// //onclick handler for update number options dropdown
+ //    $j("#add-assessment_numberOfOptions").change(function() {
+ //    	var numberOfOptions = $j(this).val();
+ //    	updateNumberOfOptions(numberOfOptions);
+	// });
+
+ //    //onclick handler for back button
+ //    $j("#add-assessment_backButton").click(function() {
+ //    	previousQuestion();
+ //    	$j(this).blur();	//unfocus button
+	// });
+
+	// //onclick handler for next button
+ //    $j("#add-assessment_nextButton").click(function() {
+ //    	nextQuestion();
+ //    	$j(this).blur();	//unfocus button
+	// });
+
+	// //onclick handler for submit button
+ //    $j("#add-assessment_submitButton").click(function() {
+ //    	submitForm();
+ //    	$j(this).blur();	//unfocus button
+	// });
+
+
+    //onclick handler for keyup question
+	$j('#add-assessment_question').keyup(function (e) {
+		refreshNewQuestion();
 	});
 
-	//onclick handler for update number options dropdown
-    $j("#add-assessment_numberOfOptions").change(function() {
-    	var numberOfOptions = $j(this).val();
-    	updateNumberOfOptions(numberOfOptions);
+	//onclick handler for enter option
+	$j('#add-assessment_option').keyup(function (e) {
+	    if (e.keyCode == 13) {
+	    	addNewOption();
+	    }
 	});
 
-    //onclick handler for back button
-    $j("#add-assessment_backButton").click(function() {
-    	previousQuestion();
+	//onclick handler for add question
+	$j('#add-assessment_addButton').click(function() {
+    	addQuestion();
     	$j(this).blur();	//unfocus button
 	});
 
-	//onclick handler for next button
-    $j("#add-assessment_nextButton").click(function() {
-    	nextQuestion();
-    	$j(this).blur();	//unfocus button
-	});
 
-	//onclick handler for submit button
-    $j("#add-assessment_submitButton").click(function() {
-    	submitForm();
-    	$j(this).blur();	//unfocus button
-	});
+
 
     console.log('jQuery scripts loaded');
 
@@ -192,22 +215,95 @@ function updateScreen(questionNumber){
 	}
 }
 
+// function changeQuestionType(questionType){
+// 	switch(questionType){
+// 		case "slider":
+// 			$j('.add-assessment_questionType').addClass('disappear');
+// 			break;
+// 		case "radio":
+// 			$j('.add-assessment_questionType').addClass('disappear');
+// 			$j('.add-assessment_questionRadio').removeClass('disappear');
+// 			break;
+// 	// 	case "checkbox":
+// 	// 		break;
+// 	// 	default:
+// 	// 		//print some error message
+// 	// 		break;
+// 	}
+// }
+
 function changeQuestionType(questionType){
 	switch(questionType){
 		case "slider":
-			$j('.add-assessment_questionType').addClass('disappear');
+			$j('#add-assessment_option').prop('disabled', true);
+			$j('#add-assessment_option').val("");
+			$j('#add-assessment_option').attr('placeholder','No need for options');
 			break;
 		case "radio":
-			$j('.add-assessment_questionType').addClass('disappear');
-			$j('.add-assessment_questionRadio').removeClass('disappear');
+			$j('#add-assessment_option').prop('disabled', false);
+			$j('#add-assessment_option').attr('placeholder','Enter options and hit Enter key');
 			break;
-	// 	case "checkbox":
-	// 		break;
-	// 	default:
-	// 		//print some error message
-	// 		break;
 	}
 }
+
+function refreshNewQuestion(){
+	$j('#add-assessment_newQuestion').text($j('#add-assessment_question').val());
+}
+
+function addNewOption(){
+	var newOption = $j('#add-assessment_option').val();
+	$j('#add-assessment_newOptions').append("<li>"+newOption+"</li>");
+	$j('#add-assessment_option').val("");
+}
+
+function addQuestion(){
+	var newQuestionType = $j('#add-assessment_questionType').val();
+	var newQuestion = $j('#add-assessment_newQuestion').text();
+	var newOption = $j('#add-assessment_newOptions').html();
+	var optionListOfDictionary = new Array();
+	//save question
+	$j("#add-assessment_newOptions > li").each(function() {
+		var newOption = $j(this).text();
+		optionListOfDictionary.push({"option":newOption});
+	});
+
+	customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "options":optionListOfDictionary});
+	console.log(JSON.stringify(customAssessment));
+
+	$j('#add-assessment_questions > tbody:last')
+	.append($j('<tr>')
+		.append($j('<td>')
+			.append(customAssessment['numberOfQuestions'])
+		).append($j('<td>')
+			.append(newQuestionType)
+		).append($j('<td>')
+			.append(newQuestion)
+		).append($j('<td>')
+			.append(newOption)
+		)
+	);
+	//increment numberOfQuestions
+	customAssessment['numberOfQuestions']=(parseInt(customAssessment['numberOfQuestions'])+1).toString();
+	//clear fields after adding
+	$j('.add-assessment_newQuestion').html("").val("");
+ }	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function updateNumberOfOptions(numberOfOptions){
 	$j('.add-assessment_optionRow5').addClass('disappear');
