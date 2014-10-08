@@ -23,3 +23,7 @@
 .hidden{
 	visibility: hidden;
 }
+
+textarea { 
+	resize:vertical; 
+}

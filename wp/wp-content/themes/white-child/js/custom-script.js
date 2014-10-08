@@ -1,5 +1,5 @@
 var $j = jQuery;
-var customAssessment = {'numberOfQuestions':"1"};
+var customAssessment = {'numberOfQuestions':"0"};
 customAssessment['questions']=[];
 
 $j(document).ready(function() {
@@ -48,12 +48,16 @@ $j(document).ready(function() {
  //    	$j(this).blur();	//unfocus button
 	// });
 
-	// //onclick handler for submit button
- //    $j("#add-assessment_submitButton").click(function() {
- //    	submitForm();
- //    	$j(this).blur();	//unfocus button
-	// });
+	//onclick handler for submit button
+    $j("#add-assessment_submitButton").click(function() {
+    	submitForm();
+    	$j(this).blur();	//unfocus button
+	});
 
+    //onclick handler for title
+	$j('#add-assessment_title').keyup(function (e) {
+		validateTitle();
+	});
 
     //onclick handler for keyup question
 	$j('#add-assessment_question').keyup(function (e) {
@@ -261,31 +265,36 @@ function addQuestion(){
 	var newQuestion = $j('#add-assessment_newQuestion').text();
 	var newOption = $j('#add-assessment_newOptions').html();
 	var optionListOfDictionary = new Array();
-	//save question
-	$j("#add-assessment_newOptions > li").each(function() {
-		var newOption = $j(this).text();
-		optionListOfDictionary.push({"option":newOption});
-	});
+	
+	//after validation
 
-	customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "options":optionListOfDictionary});
-	console.log(JSON.stringify(customAssessment));
-
-	$j('#add-assessment_questions > tbody:last')
-	.append($j('<tr>')
-		.append($j('<td>')
-			.append(customAssessment['numberOfQuestions'])
-		).append($j('<td>')
-			.append(newQuestionType)
-		).append($j('<td>')
-			.append(newQuestion)
-		).append($j('<td>')
-			.append(newOption)
-		)
-	);
-	//increment numberOfQuestions
-	customAssessment['numberOfQuestions']=(parseInt(customAssessment['numberOfQuestions'])+1).toString();
-	//clear fields after adding
-	$j('.add-assessment_newQuestion').html("").val("");
+		//increment numberOfQuestions
+		customAssessment['numberOfQuestions']=(parseInt(customAssessment['numberOfQuestions'])+1).toString();
+		//save option
+		$j("#add-assessment_newOptions > li").each(function() {
+			var newOption = $j(this).text();
+			optionListOfDictionary.push({"option":newOption});
+		});
+		//save question
+		customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "options":optionListOfDictionary});
+		console.log(JSON.stringify(customAssessment));
+		//add question to the table
+		$j('#add-assessment_questions > tbody:last')
+		.append($j('<tr>')
+			.append($j('<td>')
+				.append(customAssessment['numberOfQuestions'])
+			).append($j('<td>')
+				.append(newQuestionType)
+			).append($j('<td>')
+				.append(newQuestion)
+			).append($j('<td>')
+				.append(newOption)
+			)
+		);
+		//clear fields after adding
+		$j('.add-assessment_newQuestion').html("").val("");
+		//clear errors
+		$j('#add-assessment_questions_help').html("");
  }	
 
 
@@ -391,26 +400,61 @@ function previousQuestion(){
 	}
 }
 
+// function submitForm(){
+// 	//save the question before submitting
+// 	saveCurrentQuestion();
+
+// 	console.log("customAssessment: ");
+// 	console.log(customAssessment);
+
+// 	$j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'set','data':customAssessment})
+// 		.done( function( data ) {
+// 	  		alert( "Data Saved: " + data );
+// 		});
+
+// 	//debug for get post
+// 	// $j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'get'})
+// 	// 	.done( function( data ) {
+// 	//   		alert( "Data Recieved: " + data );
+// 	// 	});
+
+// }
+
+
 function submitForm(){
-	//save the question before submitting
-	saveCurrentQuestion();
+	//validate submission
+	var isValidated = true;
 
-	console.log("customAssessment: ");
-	console.log(customAssessment);
+	validateTitle();
+	if(!$j('#add-assessment_title').val()){
+		isValidated=false;
+	}
+	if(customAssessment['numberOfQuestions']==0){
+		$j('#add-assessment_questions_help').html("Must have at least 1 question");
+		isValidated=false;
+	}
 
+	if(isValidated){
+		customAssessment['title']=$j('#add-assessment_title').val();
+	console.log("customAssessment: " + customAssessment);
 	$j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'set','data':customAssessment})
 		.done( function( data ) {
 	  		alert( "Data Saved: " + data );
 		});
-
-	//debug for get post
-	// $j.post( "http://jiarong.me/painapp/api/post.php", {'tag':'get'})
-	// 	.done( function( data ) {
-	//   		alert( "Data Recieved: " + data );
-	// 	});
-
+	}
 }
 
-
+function validateTitle(){
+	if($j('#add-assessment_title').val()){
+		$j('#add-assessment_title_color').addClass('has-success').removeClass('has-error');
+		$j('#add-assessment_title_icon').addClass('glyphicon-ok').removeClass('glyphicon-remove');
+		$j('#add-assessment_title_help').html("");
+	}
+	else{
+		$j('#add-assessment_title_color').addClass('has-error').removeClass('has-success');
+		$j('#add-assessment_title_icon').addClass('glyphicon-remove').removeClass('glyphicon-ok');
+		$j('#add-assessment_title_help').html("Title cannot be blank");
+	}
+}
 
 

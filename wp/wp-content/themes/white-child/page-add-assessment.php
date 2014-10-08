@@ -18,9 +18,11 @@ get_header(); ?>
 				<!--start of Add Questionnaire-->
 
 					<form role="form">
-						<div class="form-group">
+						<div id="add-assessment_title_color" class="form-group has-feedback">
 							<label for="assessmentTitle">Title of Assessment</label>
-							<input type="text" class="form-control" id="add-assessment_title" placeholder="Enter Title">
+							<input type="text" class="form-control" id="add-assessment_title" placeholder="Enter title">
+							<span id="add-assessment_title_icon" class="glyphicon glyphicon-remove form-control-feedback"></span>
+							<span id="add-assessment_title_help" class="help-block"></span>
 						</div>
 
 						<table id="add-assessment_questions" class="table table-hover">
@@ -33,6 +35,10 @@ get_header(); ?>
 	 						<tbody></tbody>
 	 					</table>
 
+	 					<div class="form-group has-error">
+	 						<span id="add-assessment_questions_help" class="help-block"></span>
+	 					</div>
+	 					
 	 					<div class="row">
 	 						<div class="col-md-2">
 	 							<select class="form-control" id="add-assessment_questionType">
