@@ -64,9 +64,10 @@ $j(document).ready(function() {
 		refreshNewQuestion();
 	});
 
-	//onclick handler for enter option
-	$j('#add-assessment_option').keyup(function (e) {
-	    if (e.keyCode == 13) {
+	//onclick handler for enter/keyup options
+	$j('#add-assessment_optionMaxValue').keyup(function (e) {
+		var questionType = $j('#add-assessment_questionType').val();
+	    if ((e.keyCode==13) && questionType=="radio") {
 	    	addNewOption();
 	    }
 	});
@@ -239,13 +240,16 @@ function updateScreen(questionNumber){
 function changeQuestionType(questionType){
 	switch(questionType){
 		case "slider":
-			$j('#add-assessment_option').prop('disabled', true);
-			$j('#add-assessment_option').val("");
-			$j('#add-assessment_option').attr('placeholder','No need for options');
+			//$j('#add-assessment_option').prop('disabled', true);
+			$j('#add-assessment_optionMaxValue').val("");
+			$j('#add-assessment_optionMaxValue').attr('placeholder',"Enter Max Value");
+			$j('#add-assessment_optionMaxValue').attr('type',"number");
 			break;
 		case "radio":
-			$j('#add-assessment_option').prop('disabled', false);
-			$j('#add-assessment_option').attr('placeholder','Enter options and hit Enter key');
+			//$j('#add-assessment_option').prop('disabled', false);
+			$j('#add-assessment_optionMaxValue').val("");
+			$j('#add-assessment_optionMaxValue').attr('placeholder',"Enter option and hit Enter key to add option");
+			$j('#add-assessment_optionMaxValue').attr('type',"text");
 			break;
 	}
 }
@@ -255,9 +259,9 @@ function refreshNewQuestion(){
 }
 
 function addNewOption(){
-	var newOption = $j('#add-assessment_option').val();
+	var newOption = $j('#add-assessment_optionMaxValue').val();
 	$j('#add-assessment_newOptions').append("<li>"+newOption+"</li>");
-	$j('#add-assessment_option').val("");
+	$j('#add-assessment_optionMaxValue').val("");
 }
 
 function addQuestion(){
@@ -270,27 +274,56 @@ function addQuestion(){
 
 		//increment numberOfQuestions
 		customAssessment['numberOfQuestions']=(parseInt(customAssessment['numberOfQuestions'])+1).toString();
-		//save option
-		$j("#add-assessment_newOptions > li").each(function() {
-			var newOption = $j(this).text();
-			optionListOfDictionary.push({"option":newOption});
-		});
-		//save question
-		customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "options":optionListOfDictionary});
+		
+		switch(newQuestionType){
+			case "slider":{
+				//save maxValue
+				var newOptionMaxValue = $j('#add-assessment_optionMaxValue').val();
+				//save question
+				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":newOptionMaxValue,"options":optionListOfDictionary});
+				//add question to the table
+				$j('#add-assessment_questions > tbody:last')
+				.append($j('<tr>')
+					.append($j('<td>')
+						.append(customAssessment['numberOfQuestions'])
+					).append($j('<td>')
+						.append(newQuestionType)
+					).append($j('<td>')
+						.append(newQuestion)
+					).append($j('<td>')
+						.append(newOptionMaxValue+"-point Scale")
+					)
+				);
+				break;
+			}
+			case "radio":{
+				//save option
+				$j("#add-assessment_newOptions > li").each(function() {
+					var newOption = $j(this).text();
+					optionListOfDictionary.push({"option":newOption});
+				});
+				//save question
+				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":"", "options":optionListOfDictionary});
+				//add question to the table
+				$j('#add-assessment_questions > tbody:last')
+				.append($j('<tr>')
+					.append($j('<td>')
+						.append(customAssessment['numberOfQuestions'])
+					).append($j('<td>')
+						.append(newQuestionType)
+					).append($j('<td>')
+						.append(newQuestion)
+					).append($j('<td>')
+						.append(newOption)
+					)
+				);
+				break;
+			}
+			default:
+				break;
+		}
 		console.log(JSON.stringify(customAssessment));
-		//add question to the table
-		$j('#add-assessment_questions > tbody:last')
-		.append($j('<tr>')
-			.append($j('<td>')
-				.append(customAssessment['numberOfQuestions'])
-			).append($j('<td>')
-				.append(newQuestionType)
-			).append($j('<td>')
-				.append(newQuestion)
-			).append($j('<td>')
-				.append(newOption)
-			)
-		);
+		
 		//clear fields after adding
 		$j('.add-assessment_newQuestion').html("").val("");
 		//clear errors
