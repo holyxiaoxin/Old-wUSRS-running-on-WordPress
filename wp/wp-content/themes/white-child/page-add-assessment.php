@@ -30,8 +30,9 @@ get_header(); ?>
 								<thead>
 									<th class="col-md-1">#</th>
 		 							<th class="col-md-1">Qn. Type</th>
-		 							<th class="col-md-5">Question</th>
-		 							<th class="col-md-5">Options</th>
+		 							<th class="col-md-4">Question</th>
+		 							<th class="col-md-4">Options</th>
+		 							<th class="col-md-2">Color</th>
 		 						</thead>
 		 						<tbody></tbody>
 		 					</table>
@@ -50,17 +51,31 @@ get_header(); ?>
 					 					</select>
 									</div>
 								</div>
-								<div class="col-md-5">
+								<div class="col-md-4">
 									<div class="form-group">
 										<label class="sr-only"></label>
 										<textarea class="form-control add-assessment_newQuestion" rows="3" id="add-assessment_question" placeholder="Enter Question"></textarea>
 									</div>
 								</div>
-								<div class="col-md-5">
+								<div class="col-md-4">
 									<div id="add-assessment_optionMaxValue_color" class="form-group has-feedback">
 										<label class="sr-only"></label>
 										<input type="number" class="form-control add-assessment_newQuestion" id="add-assessment_optionMaxValue" placeholder="Enter Max Value"></input>
 										<span id="add-assessment_title_help" class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="sr-only"></label>
+										<select class="form-control" rows="3" id="add-assessment_color">
+											<option value="default">Default</option>
+					   						<option value="blue">Blue</option>
+					   						<option value="pink">Pink</option>
+					   						<option value="grey">Grey</option>
+					   						<option value="orange">Orange</option>
+					   						<option value="green">Green</option>
+					   						<option value="yellow">Yellow</option>
+										</select>
 									</div>
 								</div>
 							</div>

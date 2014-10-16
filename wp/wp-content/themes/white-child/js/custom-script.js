@@ -267,7 +267,7 @@ function addNewOption(){
 function addQuestion(){
 	var newQuestionType = $j('#add-assessment_questionType').val();
 	var newQuestion = $j('#add-assessment_newQuestion').text();
-	var newOption = $j('#add-assessment_newOptions').html();
+	var newColor = $j('#add-assessment_color').val();
 	var optionListOfDictionary = new Array();
 	
 	//after validation
@@ -280,7 +280,7 @@ function addQuestion(){
 				//save maxValue
 				var newOptionMaxValue = $j('#add-assessment_optionMaxValue').val();
 				//save question
-				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":newOptionMaxValue,"options":optionListOfDictionary});
+				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":newOptionMaxValue, "color":newColor, "options":optionListOfDictionary});
 				//add question to the table
 				$j('#add-assessment_questions > tbody:last')
 				.append($j('<tr>')
@@ -292,18 +292,21 @@ function addQuestion(){
 						.append(newQuestion)
 					).append($j('<td>')
 						.append(newOptionMaxValue+"-point Scale")
+					).append($j('<td>')
+						.append(newColor)
 					)
 				);
 				break;
 			}
 			case "radio":{
+				var newOption = $j('#add-assessment_newOptions').html();
 				//save option
 				$j("#add-assessment_newOptions > li").each(function() {
 					var newOption = $j(this).text();
 					optionListOfDictionary.push({"option":newOption});
 				});
 				//save question
-				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":"", "options":optionListOfDictionary});
+				customAssessment['questions'].push({"question":newQuestion, "questionType":newQuestionType, "maxValue":"", "color":newColor, "options":optionListOfDictionary});
 				//add question to the table
 				$j('#add-assessment_questions > tbody:last')
 				.append($j('<tr>')
